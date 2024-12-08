@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Spotify Bootleg</string>
+    <string name="header_category">Category</string>
 </resources>
