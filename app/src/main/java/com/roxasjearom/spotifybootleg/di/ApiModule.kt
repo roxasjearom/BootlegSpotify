@@ -1,6 +1,7 @@
 package com.roxasjearom.spotifybootleg.di
 
 import com.roxasjearom.spotifybootleg.data.remote.SpotifyApiService
+import com.roxasjearom.spotifybootleg.data.remote.network.NetworkResultCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -30,6 +31,7 @@ object ApiModule {
                         .build()
                 )
             )
+            .addCallAdapterFactory(NetworkResultCallAdapterFactory.create())
             .client(
                 OkHttpClient.Builder()
                     .addInterceptor(HttpLoggingInterceptor().apply {

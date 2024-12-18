@@ -1,5 +1,6 @@
 package com.roxasjearom.spotifybootleg.data.remote
 
+import com.roxasjearom.spotifybootleg.data.remote.network.NetworkResult
 import com.roxasjearom.spotifybootleg.data.remote.response.CategoriesResponse
 import retrofit2.http.GET
 
@@ -9,5 +10,5 @@ interface SpotifyApiService {
     }
 
     @GET("${API_VERSION}/browse/categories")
-    suspend fun getCategories(): CategoriesResponse
+    suspend fun getCategories(): NetworkResult<CategoriesResponse>
 }
