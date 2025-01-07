@@ -4,4 +4,5 @@ import com.roxasjearom.spotifybootleg.domain.model.Category
 
 interface MainRepository {
     suspend fun getCategories(): List<Category>
+    suspend fun getAccessToken(): String
 }

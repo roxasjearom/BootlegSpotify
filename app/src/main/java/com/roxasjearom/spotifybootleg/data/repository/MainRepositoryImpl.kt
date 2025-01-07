@@ -19,4 +19,8 @@ class MainRepositoryImpl @Inject constructor(
             emptyList()
         }
     }
+
+    override suspend fun getAccessToken(): String {
+        return remoteDataSource.getAccessToken().accessToken
+    }
 }
