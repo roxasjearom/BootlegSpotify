@@ -21,6 +21,7 @@ class HomeScreenViewModel @Inject constructor(
 
     init {
         getCategories()
+        getAlbums()
     }
 
     private fun getCategories() {
@@ -28,6 +29,15 @@ class HomeScreenViewModel @Inject constructor(
             val categories = mainRepository.getCategories()
             _homeUiState.update {
                 it.copy(categories = categories)
+            }
+        }
+    }
+
+    private fun getAlbums() {
+        viewModelScope.launch {
+            val albums = mainRepository.getAlbums()
+            _homeUiState.update {
+                it.copy(albums = albums)
             }
         }
     }

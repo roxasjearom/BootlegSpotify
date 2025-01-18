@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">Spotify Bootleg</string>
     <string name="header_category">Category</string>
+    <string name="header_album">Albums</string>
+    <string name="label_show_all">Show all</string>
 </resources>

@@ -2,6 +2,8 @@ package com.roxasjearom.spotifybootleg.ui.home.category
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -12,7 +14,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -31,13 +35,29 @@ fun CategorySection(
     modifier: Modifier = Modifier,
     categories: List<Category>,
     onCategoryClicked: (String) -> Unit,
+    onShowAllClicked: () -> Unit,
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
-        Text(
-            text = stringResource(R.string.header_category),
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(8.dp)
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                text = stringResource(R.string.header_category),
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(8.dp)
+            )
+            Spacer(modifier = Modifier.weight(1f))
+            TextButton(
+                onClick = onShowAllClicked,
+                modifier = Modifier.padding(8.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.label_show_all),
+                )
+            }
+        }
+
         LazyRow {
             items(categories) { category ->
                 CategoryItem(category = category, onCategoryClicked = onCategoryClicked)
@@ -77,6 +97,7 @@ fun CategoryItem(
         }
     }
 }
+
 @Preview
 @Composable
 fun CategorySectionPreview(modifier: Modifier = Modifier) {
@@ -99,7 +120,8 @@ fun CategorySectionPreview(modifier: Modifier = Modifier) {
                     iconUrl = "https://t.scdn.co/images/728ed47fc1674feb95f7ac20236eb6d7.jpeg"
                 )
             ),
-            onCategoryClicked = {}
+            onCategoryClicked = {},
+            onShowAllClicked = {},
         )
     }
 }
