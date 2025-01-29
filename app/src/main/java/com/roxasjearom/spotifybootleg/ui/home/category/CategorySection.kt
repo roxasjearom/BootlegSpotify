@@ -8,10 +8,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -72,29 +71,29 @@ fun CategoryItem(
     category: Category,
     onCategoryClicked: (String) -> Unit,
 ) {
-    Card(
+    Column(
         modifier = modifier
-            .padding(8.dp)
-            .clickable { onCategoryClicked(category.id) },
+            .width(124.dp)
+            .wrapContentHeight()
+            .clickable { onCategoryClicked(category.id) }
+            .padding(8.dp),
     ) {
-        Column(modifier = Modifier.wrapContentSize()) {
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(category.iconUrl)
-                    .crossfade(true)
-                    .memoryCachePolicy(CachePolicy.ENABLED)
-                    .build(),
-                contentDescription = null,
-                modifier = Modifier
-                    .width(124.dp)
-                    .height(124.dp)
-            )
-            Text(
-                text = category.name.uppercase(),
-                style = MaterialTheme.typography.titleSmall,
-                modifier = Modifier.align(CenterHorizontally),
-            )
-        }
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(category.iconUrl)
+                .crossfade(true)
+                .memoryCachePolicy(CachePolicy.ENABLED)
+                .build(),
+            contentDescription = null,
+            modifier = Modifier
+                .width(124.dp)
+                .height(124.dp)
+        )
+        Text(
+            text = category.name.uppercase(),
+            style = MaterialTheme.typography.titleSmall,
+            modifier = Modifier.align(CenterHorizontally),
+        )
     }
 }
 
