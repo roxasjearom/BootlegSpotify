@@ -1,4 +1,4 @@
-package com.roxasjearom.spotifybootleg.ui.home.album
+package com.roxasjearom.spotifybootleg.ui.home.artist
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -18,20 +18,18 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.roxasjearom.spotifybootleg.R
-import com.roxasjearom.spotifybootleg.domain.model.Album
-import com.roxasjearom.spotifybootleg.ui.theme.SpotifyBootlegTheme
+import com.roxasjearom.spotifybootleg.domain.model.Artist
 
 @Composable
-fun AlbumSection(
+fun ArtistSection(
     modifier: Modifier = Modifier,
-    albums: List<Album>,
-    onAlbumClicked: (String) -> Unit,
+    artists: List<Artist>,
+    onArtistClicked: (String) -> Unit,
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
         Row(
@@ -39,35 +37,36 @@ fun AlbumSection(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = stringResource(R.string.header_album),
+                text = stringResource(R.string.header_artist),
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.padding(8.dp)
             )
         }
+
         LazyRow {
-            items(albums) { album ->
-                AlbumItem(album = album, onAlbumClicked = onAlbumClicked)
+            items(artists) { artist ->
+                ArtistItem(artist = artist, onArtistClicked = onArtistClicked)
             }
         }
     }
 }
 
 @Composable
-fun AlbumItem(
+fun ArtistItem(
     modifier: Modifier = Modifier,
-    album: Album,
-    onAlbumClicked: (String) -> Unit,
+    artist: Artist,
+    onArtistClicked: (String) -> Unit,
 ) {
     Column(
         modifier = modifier
             .width(124.dp)
             .wrapContentHeight()
-            .clickable { onAlbumClicked(album.id) }
+            .clickable { onArtistClicked(artist.id) }
             .padding(8.dp)
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data(album.imageUrl)
+                .data(artist.imageUrl)
                 .crossfade(true)
                 .memoryCachePolicy(CachePolicy.ENABLED)
                 .build(),
@@ -77,23 +76,9 @@ fun AlbumItem(
                 .height(124.dp)
         )
         Text(
-            text = album.name,
+            text = artist.name,
             style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.align(CenterHorizontally),
-        )
-    }
-}
-
-@Preview
-@Composable
-fun AlbumPreview(modifier: Modifier = Modifier) {
-    SpotifyBootlegTheme {
-        AlbumItem(
-            album = Album(
-                id = "382ObEPsp2rxGrnsizN5TX",
-                name = "TRON: Legacy Reconfigured",
-                imageUrl = "https://i.scdn.co/image/ab67616d00001e0226597c053b38c9cf93f8f3a9",
-            ), onAlbumClicked = {}
         )
     }
 }
