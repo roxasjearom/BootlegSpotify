@@ -1,7 +1,8 @@
 package com.roxasjearom.spotifybootleg.domain.model
 
-data class Artist(
+data class Song(
     val id: String,
     val name: String,
-    val imageUrl: String?,
+    val isExplicit: Boolean,
+    val artists: List<Artist>,
 )
