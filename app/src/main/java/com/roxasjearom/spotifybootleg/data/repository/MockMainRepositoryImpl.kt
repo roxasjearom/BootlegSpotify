@@ -74,7 +74,7 @@ class MockMainRepositoryImpl @Inject constructor() : MainRepository {
         )
     }
 
-    override suspend fun getAlbumDetails(): AlbumDetails {
+    override suspend fun getAlbumDetails(id: String): AlbumDetails {
         return AlbumDetails(
             imageUrl = "https://i.scdn.co/image/ab67616d0000b2732c5b24ecfa39523a75c993c4",
             name = "Global Warming",

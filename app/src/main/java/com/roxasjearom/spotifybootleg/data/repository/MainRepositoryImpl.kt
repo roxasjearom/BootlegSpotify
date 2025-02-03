@@ -31,7 +31,7 @@ class MainRepositoryImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override suspend fun getAlbumDetails(): AlbumDetails {
+    override suspend fun getAlbumDetails(id: String): AlbumDetails {
         TODO("Not yet implemented")
     }
 

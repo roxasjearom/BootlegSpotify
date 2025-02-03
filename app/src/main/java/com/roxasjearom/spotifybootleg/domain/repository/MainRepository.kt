@@ -14,5 +14,5 @@ interface MainRepository {
 
     suspend fun getArtists(): List<Artist>
 
-    suspend fun getAlbumDetails(): AlbumDetails
+    suspend fun getAlbumDetails(id: String): AlbumDetails
 }
