@@ -34,8 +34,4 @@ class MainRepositoryImpl @Inject constructor(
     override suspend fun getAlbumDetails(id: String): AlbumDetails {
         TODO("Not yet implemented")
     }
-
-    override suspend fun getAccessToken(): String {
-        return remoteDataSource.getAccessToken().accessToken
-    }
 }

@@ -1,13 +1,17 @@
 package com.roxasjearom.spotifybootleg.di
 
-import com.roxasjearom.spotifybootleg.data.remote.SpotifyAccountsService
+import android.content.Context
+import com.roxasjearom.spotifybootleg.data.remote.AuthenticationService
 import com.roxasjearom.spotifybootleg.data.remote.SpotifyApiService
+import com.roxasjearom.spotifybootleg.data.remote.authentication.AuthAuthenticator
+import com.roxasjearom.spotifybootleg.data.remote.authentication.TokenManager
 import com.roxasjearom.spotifybootleg.data.remote.network.NetworkResultCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -25,11 +29,15 @@ object ApiModule {
     private const val BASE_URL = "https://api.spotify.com/"
     private const val ACCOUNTS_URL = "https://accounts.spotify.com"
     private const val CLIENT_ID = "ADD YOUR CLIENT ID HERE"
-    private const val CLIENT_SECRET = "ADD YOUR CLIENT SECRET HERE"
+    private const val CLIENT_SECRET = "ADD YOUR CLIENT ID HERE"
 
     @Singleton
     @Provides
-    fun provideSpotifyApi(): SpotifyApiService {
+    fun provideTokenManager(@ApplicationContext context: Context): TokenManager = TokenManager(context)
+
+    @Singleton
+    @Provides
+    fun provideSpotifyApi(authAuthenticator: AuthAuthenticator): SpotifyApiService {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(
@@ -42,6 +50,7 @@ object ApiModule {
             .addCallAdapterFactory(NetworkResultCallAdapterFactory.create())
             .client(
                 OkHttpClient.Builder()
+                    .authenticator(authAuthenticator)
                     .addInterceptor(HttpLoggingInterceptor().apply {
                         level = HttpLoggingInterceptor.Level.BODY
                     }).build()
@@ -52,7 +61,7 @@ object ApiModule {
 
     @Singleton
     @Provides
-    fun provideAccountsApi(): SpotifyAccountsService {
+    fun provideAccountsApi(): AuthenticationService {
         return Retrofit.Builder()
             .baseUrl(ACCOUNTS_URL)
             .addConverterFactory(
@@ -64,7 +73,7 @@ object ApiModule {
             )
             .client(getAuthorizationClient().build())
             .build()
-            .create(SpotifyAccountsService::class.java)
+            .create(AuthenticationService::class.java)
     }
 
     @OptIn(ExperimentalEncodingApi::class)

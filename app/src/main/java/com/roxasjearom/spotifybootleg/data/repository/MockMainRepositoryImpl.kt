@@ -10,10 +10,6 @@ import javax.inject.Inject
 
 class MockMainRepositoryImpl @Inject constructor() : MainRepository {
 
-    override suspend fun getAccessToken(): String {
-        return "fake_access_token"
-    }
-
     override suspend fun getCategories(): List<Category> {
         return listOf(
             Category(

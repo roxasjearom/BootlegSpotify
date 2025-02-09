@@ -6,8 +6,6 @@ import com.roxasjearom.spotifybootleg.domain.model.Artist
 import com.roxasjearom.spotifybootleg.domain.model.Category
 
 interface MainRepository {
-    suspend fun getAccessToken(): String
-
     suspend fun getCategories(): List<Category>
 
     suspend fun getAlbums(): List<Album>
