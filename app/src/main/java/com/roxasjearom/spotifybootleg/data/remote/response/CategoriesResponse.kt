@@ -13,8 +13,7 @@ data class Categories(
     val limit: Int,
     val next: String,
     val offset: Int,
-    val previous: String,
-    val total: Int
+    val total: Int,
 )
 
 data class Icon(

@@ -30,7 +30,7 @@ class MockMainRepositoryImpl @Inject constructor() : MainRepository {
         )
     }
 
-    override suspend fun getAlbums(): List<Album> {
+    override suspend fun getAlbums(ids: List<String>): List<Album> {
         return listOf(
             Album(
                 id = "382ObEPsp2rxGrnsizN5TX",
@@ -50,7 +50,7 @@ class MockMainRepositoryImpl @Inject constructor() : MainRepository {
         )
     }
 
-    override suspend fun getArtists(): List<Artist> {
+    override suspend fun getArtists(ids: List<String>): List<Artist> {
         return listOf(
             Artist(
                 id = "2CIMQHirSU0MQqyYHq0eOx",

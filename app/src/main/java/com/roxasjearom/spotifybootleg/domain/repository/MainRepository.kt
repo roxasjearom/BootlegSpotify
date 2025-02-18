@@ -8,9 +8,9 @@ import com.roxasjearom.spotifybootleg.domain.model.Category
 interface MainRepository {
     suspend fun getCategories(): List<Category>
 
-    suspend fun getAlbums(): List<Album>
+    suspend fun getAlbums(ids: List<String>): List<Album>
 
-    suspend fun getArtists(): List<Artist>
+    suspend fun getArtists(ids: List<String>): List<Artist>
 
     suspend fun getAlbumDetails(id: String): AlbumDetails
 }

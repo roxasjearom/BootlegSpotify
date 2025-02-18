@@ -1,6 +1,6 @@
 package com.roxasjearom.spotifybootleg.di
 
-import com.roxasjearom.spotifybootleg.data.repository.MockMainRepositoryImpl
+import com.roxasjearom.spotifybootleg.data.repository.MainRepositoryImpl
 import com.roxasjearom.spotifybootleg.domain.repository.MainRepository
 import dagger.Binds
 import dagger.Module
@@ -14,5 +14,5 @@ abstract class RepositoryModule {
 
     @ActivityRetainedScoped
     @Binds
-    abstract fun bindMainRepository(impl: MockMainRepositoryImpl): MainRepository
+    abstract fun bindMainRepository(impl: MainRepositoryImpl): MainRepository
 }
