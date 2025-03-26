@@ -1,6 +1,7 @@
 package com.roxasjearom.spotifybootleg.di
 
 import android.content.Context
+import com.roxasjearom.spotifybootleg.BuildConfig
 import com.roxasjearom.spotifybootleg.data.remote.AuthenticationService
 import com.roxasjearom.spotifybootleg.data.remote.SpotifyApiService
 import com.roxasjearom.spotifybootleg.data.remote.authentication.AuthAuthenticator
@@ -27,8 +28,8 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 object ApiModule {
     private const val BASE_URL = "https://api.spotify.com/"
     private const val ACCOUNTS_URL = "https://accounts.spotify.com"
-    private const val CLIENT_ID = "ADD YOUR CLIENT ID HERE"
-    private const val CLIENT_SECRET = "ADD YOUR CLIENT ID HERE"
+    private const val CLIENT_ID = BuildConfig.CLIENT_ID
+    private const val CLIENT_SECRET = BuildConfig.CLIENT_SECRET
 
     @Singleton
     @Provides
