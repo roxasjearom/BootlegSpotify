@@ -14,9 +14,12 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -138,14 +141,14 @@ fun SongItem(song: Song, modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .padding(all = 8.dp)
+            .padding(all = 16.dp)
     ) {
         val artists = song.artists.joinToString(", ") { it.name }
 
         Text(
             text = song.name,
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.bodyLarge,
+            fontWeight = FontWeight.Normal,
         )
         Row(verticalAlignment = Alignment.CenterVertically) {
             if (song.isExplicit) {
@@ -153,11 +156,17 @@ fun SongItem(song: Song, modifier: Modifier = Modifier) {
                 Spacer(modifier = Modifier.width(4.dp))
             }
 
-            Text(
-                text = artists,
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.Normal,
-            )
+            CompositionLocalProvider(
+                LocalContentColor provides MaterialTheme.colorScheme.onSurface.copy(
+                    alpha = 0.70f
+                )
+            ) {
+                Text(
+                    text = artists,
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.Normal,
+                )
+            }
         }
     }
 }
@@ -178,37 +187,40 @@ fun ExplicitTag() {
 @Composable
 fun SongListScreenPreview() {
     SpotifyBootlegTheme {
-        SongListScreen(
-            title = "Global Warming",
-            subtitle = "Pitbull",
-            imageUrl = "https://i.scdn.co/image/ab67616d0000b2732c5b24ecfa39523a75c993c4",
-            songs = listOf(
-                Song(
-                    id = "292kifgxa7S78AuzA5NMpL",
-                    name = "Global Warming (feat. Sensato)",
-                    artists = listOf(
-                        Artist(
-                            id = "0TnOYISbd1XYRBk9myaseg",
-                            name = "Pitbull",
-                            imageUrl = null,
-                        )
+        Surface {
+            SongListScreen(
+                title = "Global Warming",
+                subtitle = "Pitbull",
+                imageUrl = "https://i.scdn.co/image/ab67616d0000b2732c5b24ecfa39523a75c993c4",
+                songs = listOf(
+                    Song(
+                        id = "292kifgxa7S78AuzA5NMpL",
+                        name = "Global Warming (feat. Sensato)",
+                        artists = listOf(
+                            Artist(
+                                id = "0TnOYISbd1XYRBk9myaseg",
+                                name = "Pitbull",
+                                imageUrl = null,
+                            )
+                        ),
+                        isExplicit = true,
                     ),
-                    isExplicit = true,
-                ),
-                Song(
-                    id = "0Hf4aIJpsN4Os2f0y0VqWl",
-                    name = "Feel This Moment (feat. Christina Aguilera)",
-                    artists = listOf(
-                        Artist(
-                            id = "0TnOYISbd1XYRBk9myaseg",
-                            name = "Pitbull",
-                            imageUrl = null,
-                        )
+                    Song(
+                        id = "0Hf4aIJpsN4Os2f0y0VqWl",
+                        name = "Feel This Moment (feat. Christina Aguilera)",
+                        artists = listOf(
+                            Artist(
+                                id = "0TnOYISbd1XYRBk9myaseg",
+                                name = "Pitbull",
+                                imageUrl = null,
+                            )
+                        ),
+                        isExplicit = false,
                     ),
-                    isExplicit = false,
-                ),
+                )
             )
-        )
+        }
+
     }
 }
 
@@ -216,19 +228,21 @@ fun SongListScreenPreview() {
 @Composable
 fun SongItemPreview() {
     SpotifyBootlegTheme {
-        SongItem(
-            song = Song(
-                id = "292kifgxa7S78AuzA5NMpL",
-                name = "Global Warming (feat. Sensato)",
-                artists = listOf(
-                    Artist(
-                        id = "0TnOYISbd1XYRBk9myaseg",
-                        name = "Pitbull",
-                        imageUrl = null
-                    )
+        Surface {
+            SongItem(
+                song = Song(
+                    id = "292kifgxa7S78AuzA5NMpL",
+                    name = "Global Warming (feat. Sensato)",
+                    artists = listOf(
+                        Artist(
+                            id = "0TnOYISbd1XYRBk9myaseg",
+                            name = "Pitbull",
+                            imageUrl = null
+                        )
+                    ),
+                    isExplicit = true,
                 ),
-                isExplicit = true,
-            ),
-        )
+            )
+        }
     }
 }
