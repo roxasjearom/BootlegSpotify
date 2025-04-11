@@ -4,7 +4,7 @@ import com.roxasjearom.spotifybootleg.domain.model.Album
 import com.roxasjearom.spotifybootleg.domain.model.AlbumDetails
 import com.roxasjearom.spotifybootleg.domain.model.Artist
 import com.roxasjearom.spotifybootleg.domain.model.Category
-import com.roxasjearom.spotifybootleg.domain.model.Song
+import com.roxasjearom.spotifybootleg.domain.model.Track
 import com.roxasjearom.spotifybootleg.domain.repository.MainRepository
 import javax.inject.Inject
 
@@ -78,26 +78,26 @@ class MockMainRepositoryImpl @Inject constructor() : MainRepository {
             artists = listOf(
                 Artist(id = "0TnOYISbd1XYRBk9myaseg", name = "Pitbull", imageUrl = null)
             ),
-            songs = listOf(
-                Song(
+            tracks = listOf(
+                Track(
                     id = "292kifgxa7S78AuzA5NMpL",
                     name = "Global Warming (feat. Sensato)",
                     artists = listOf(Artist(id = "0TnOYISbd1XYRBk9myaseg", name = "Pitbull", imageUrl = null)),
                     isExplicit = true,
                 ),
-                Song(
+                Track(
                     id = "3Tu7uWBecS6GsLsL8UONKn",
                     name = "Don't Stop the Party (feat. TJR)",
                     artists = listOf(Artist(id = "0TnOYISbd1XYRBk9myaseg", name = "Pitbull", imageUrl = null)),
                     isExplicit = false,
                 ),
-                Song(
+                Track(
                     id = "0Hf4aIJpsN4Os2f0y0VqWl",
                     name = "Feel This Moment (feat. Christina Aguilera)",
                     artists = listOf(Artist(id = "0TnOYISbd1XYRBk9myaseg", name = "Pitbull", imageUrl = null)),
                     isExplicit = false,
                 ),
-                Song(
+                Track(
                     id = "3eQlGeyuSibgAGPEJugaDW",
                     name = "Back in Time",
                     artists = listOf(Artist(id = "0TnOYISbd1XYRBk9myaseg", name = "Pitbull", imageUrl = null)),

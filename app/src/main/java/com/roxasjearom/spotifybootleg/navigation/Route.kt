@@ -8,5 +8,5 @@ sealed class Route {
     data object Home: Route()
 
     @Serializable
-    data class SongList(val id: String): Route()
+    data class TrackList(val id: String): Route()
 }

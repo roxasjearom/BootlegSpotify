@@ -18,8 +18,8 @@ import androidx.navigation.compose.rememberNavController
 import com.roxasjearom.spotifybootleg.navigation.Route
 import com.roxasjearom.spotifybootleg.ui.home.HomeScreen
 import com.roxasjearom.spotifybootleg.ui.home.HomeScreenViewModel
-import com.roxasjearom.spotifybootleg.ui.songlist.SongListScreen
-import com.roxasjearom.spotifybootleg.ui.songlist.SongListViewModel
+import com.roxasjearom.spotifybootleg.ui.tracklist.TrackListScreen
+import com.roxasjearom.spotifybootleg.ui.tracklist.TrackListViewModel
 import com.roxasjearom.spotifybootleg.ui.theme.SpotifyBootlegTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -48,23 +48,23 @@ class MainActivity : ComponentActivity() {
                                     Toast.makeText(context, "Navigate to Song list screen. Category Id: $it", Toast.LENGTH_SHORT).show()
                                 },
                                 onAlbumClicked = { id ->
-                                    navController.navigate(Route.SongList(id))
+                                    navController.navigate(Route.TrackList(id))
                                 },
                                 onArtistClicked = {
                                     Toast.makeText(context, "Navigate to Song list screen. Artist Id: $it", Toast.LENGTH_SHORT).show()
                                 },
                             )
                         }
-                        composable<Route.SongList> {
-                            val viewModel: SongListViewModel = hiltViewModel()
-                            SongListScreen(
-                                title = viewModel.songListUiState.collectAsStateWithLifecycle().value.headerTitle,
-                                subtitle = viewModel.songListUiState.collectAsStateWithLifecycle().value.artists.joinToString(
+                        composable<Route.TrackList> {
+                            val viewModel: TrackListViewModel = hiltViewModel()
+                            TrackListScreen(
+                                title = viewModel.trackListUiState.collectAsStateWithLifecycle().value.headerTitle,
+                                subtitle = viewModel.trackListUiState.collectAsStateWithLifecycle().value.artists.joinToString(
                                     ", "
                                 ) { it.name },
-                                imageUrl = viewModel.songListUiState.collectAsStateWithLifecycle().value.imageUrl
+                                imageUrl = viewModel.trackListUiState.collectAsStateWithLifecycle().value.imageUrl
                                     ?: "",
-                                songs = viewModel.songListUiState.collectAsStateWithLifecycle().value.songs,
+                                tracks = viewModel.trackListUiState.collectAsStateWithLifecycle().value.tracks,
                                 modifier = Modifier.padding(innerPadding),
                             )
                         }

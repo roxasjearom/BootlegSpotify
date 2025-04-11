@@ -1,10 +1,10 @@
 package com.roxasjearom.spotifybootleg.data.mapper
 
 import com.roxasjearom.spotifybootleg.data.remote.response.AlbumDto
-import com.roxasjearom.spotifybootleg.data.remote.response.Item
+import com.roxasjearom.spotifybootleg.data.remote.response.ItemDto
 import com.roxasjearom.spotifybootleg.domain.model.Album
 import com.roxasjearom.spotifybootleg.domain.model.AlbumDetails
-import com.roxasjearom.spotifybootleg.domain.model.Song
+import com.roxasjearom.spotifybootleg.domain.model.Track
 
 fun AlbumDto.toAlbum() = Album(
     id = id,
@@ -17,10 +17,10 @@ fun AlbumDto.toAlbumDetails() = AlbumDetails(
     name = name,
     releaseDate = releaseDate,
     artists = artists.map { it.toArtist() },
-    songs = tracks.items.map { it.toSongs() }
+    tracks = tracks.items.map { it.toSongs() }
 )
 
-fun Item.toSongs() = Song(
+fun ItemDto.toSongs() = Track(
     id = id,
     name = name,
     isExplicit = explicit,

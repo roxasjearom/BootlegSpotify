@@ -5,5 +5,5 @@ data class AlbumDetails(
     val name: String,
     val releaseDate: String,
     val artists: List<Artist>,
-    val songs: List<Song>,
+    val tracks: List<Track>,
 )

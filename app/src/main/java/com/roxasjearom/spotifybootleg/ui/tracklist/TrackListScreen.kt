@@ -1,4 +1,4 @@
-package com.roxasjearom.spotifybootleg.ui.songlist
+package com.roxasjearom.spotifybootleg.ui.tracklist
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -45,15 +45,15 @@ import coil.compose.AsyncImage
 import coil.request.CachePolicy
 import coil.request.ImageRequest
 import com.roxasjearom.spotifybootleg.domain.model.Artist
-import com.roxasjearom.spotifybootleg.domain.model.Song
+import com.roxasjearom.spotifybootleg.domain.model.Track
 import com.roxasjearom.spotifybootleg.ui.theme.SpotifyBootlegTheme
 
 @Composable
-fun SongListScreen(
+fun TrackListScreen(
     title: String,
     subtitle: String,
     imageUrl: String,
-    songs: List<Song> = emptyList(),
+    tracks: List<Track> = emptyList(),
     modifier: Modifier = Modifier,
     maxImageSize: Dp = 300.dp,
     minImageSize: Dp = 100.dp
@@ -93,8 +93,8 @@ fun SongListScreen(
                     .padding(all = 16.dp)
 
             ) {
-                items(songs) { song ->
-                    SongItem(song = song)
+                items(tracks) { track ->
+                    TrackItem(track = track)
                 }
             }
         }
@@ -136,22 +136,22 @@ fun HeaderSection(title: String, subtitle: String, modifier: Modifier = Modifier
 }
 
 @Composable
-fun SongItem(song: Song, modifier: Modifier = Modifier) {
+fun TrackItem(track: Track, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
             .padding(all = 16.dp)
     ) {
-        val artists = song.artists.joinToString(", ") { it.name }
+        val artists = track.artists.joinToString(", ") { it.name }
 
         Text(
-            text = song.name,
+            text = track.name,
             style = MaterialTheme.typography.bodyLarge,
             fontWeight = FontWeight.Normal,
         )
         Row(verticalAlignment = Alignment.CenterVertically) {
-            if (song.isExplicit) {
+            if (track.isExplicit) {
                 ExplicitTag()
                 Spacer(modifier = Modifier.width(4.dp))
             }
@@ -185,15 +185,15 @@ fun ExplicitTag() {
 
 @Preview(showBackground = true, heightDp = 600)
 @Composable
-fun SongListScreenPreview() {
+fun TrackListScreenPreview() {
     SpotifyBootlegTheme {
         Surface {
-            SongListScreen(
+            TrackListScreen(
                 title = "Global Warming",
                 subtitle = "Pitbull",
                 imageUrl = "https://i.scdn.co/image/ab67616d0000b2732c5b24ecfa39523a75c993c4",
-                songs = listOf(
-                    Song(
+                tracks = listOf(
+                    Track(
                         id = "292kifgxa7S78AuzA5NMpL",
                         name = "Global Warming (feat. Sensato)",
                         artists = listOf(
@@ -205,7 +205,7 @@ fun SongListScreenPreview() {
                         ),
                         isExplicit = true,
                     ),
-                    Song(
+                    Track(
                         id = "0Hf4aIJpsN4Os2f0y0VqWl",
                         name = "Feel This Moment (feat. Christina Aguilera)",
                         artists = listOf(
@@ -226,11 +226,11 @@ fun SongListScreenPreview() {
 
 @Preview(showBackground = true)
 @Composable
-fun SongItemPreview() {
+fun TrackItemPreview() {
     SpotifyBootlegTheme {
         Surface {
-            SongItem(
-                song = Song(
+            TrackItem(
+                track = Track(
                     id = "292kifgxa7S78AuzA5NMpL",
                     name = "Global Warming (feat. Sensato)",
                     artists = listOf(

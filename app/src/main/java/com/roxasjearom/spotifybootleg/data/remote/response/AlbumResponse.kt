@@ -22,23 +22,23 @@ data class AlbumDto(
     val type: String,
     val uri: String,
     val artists: List<ArtistDto>,
-    val tracks: Tracks,
+    val tracks: TracksDto,
     val copyrights: List<Copyright>,
     val label: String,
     val popularity: Long,
 )
 
-data class Tracks(
+data class TracksDto(
     val href: String,
     val limit: Long,
     val next: Any?,
     val offset: Long,
     val previous: Any?,
     val total: Long,
-    val items: List<Item>,
+    val items: List<ItemDto>,
 )
 
-data class Item(
+data class ItemDto(
     val artists: List<ArtistDto>,
     @Json(name = "disc_number")
     val discNumber: Long,

@@ -1,4 +1,4 @@
-package com.roxasjearom.spotifybootleg.ui.songlist
+package com.roxasjearom.spotifybootleg.ui.tracklist
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -15,31 +15,30 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SongListViewModel @Inject constructor(
+class TrackListViewModel @Inject constructor(
     private val mainRepository: MainRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    private val _songListUiState = MutableStateFlow(SongListUiState())
-    val songListUiState: StateFlow<SongListUiState> = _songListUiState.asStateFlow()
+    private val _trackListUiState = MutableStateFlow(TrackListUiState())
+    val trackListUiState: StateFlow<TrackListUiState> = _trackListUiState.asStateFlow()
 
     init {
-        val id = savedStateHandle.toRoute<Route.SongList>().id
-        getSongList(id)
+        val id = savedStateHandle.toRoute<Route.TrackList>().id
+        getTrackList(id)
     }
 
-    private fun getSongList(id: String) {
+    private fun getTrackList(id: String) {
         viewModelScope.launch {
             val albumDetails = mainRepository.getAlbumDetails(id)
-            _songListUiState.update {
+            _trackListUiState.update {
                 it.copy(
                     headerTitle = albumDetails.name,
                     imageUrl = albumDetails.imageUrl,
                     artists = albumDetails.artists,
-                    songs = albumDetails.songs,
+                    tracks = albumDetails.tracks,
                 )
             }
         }
     }
-
 }
