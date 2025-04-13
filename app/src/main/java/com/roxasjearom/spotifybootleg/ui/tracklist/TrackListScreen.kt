@@ -14,10 +14,17 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -48,6 +55,7 @@ import com.roxasjearom.spotifybootleg.domain.model.Artist
 import com.roxasjearom.spotifybootleg.domain.model.Track
 import com.roxasjearom.spotifybootleg.ui.theme.SpotifyBootlegTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TrackListScreen(
     title: String,
@@ -55,23 +63,30 @@ fun TrackListScreen(
     imageUrl: String,
     tracks: List<Track> = emptyList(),
     modifier: Modifier = Modifier,
-    maxImageSize: Dp = 300.dp,
-    minImageSize: Dp = 100.dp
+    maxImageSize: Dp = 240.dp,
+    minImageSize: Dp = 54.dp,
+    onBackClick: () -> Unit,
 ) {
     var currentImageSize by remember { mutableStateOf(maxImageSize) }
     var imageScale by remember { mutableFloatStateOf(1f) }
+    var currentImageAlpha by remember { mutableFloatStateOf(1f) }
+    var currentTitleAlpha by remember { mutableFloatStateOf(0f) }
 
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
             override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
-                val delta = available.y
-                val newImageSize = currentImageSize + delta.dp
+                val newImageSize = getNewImageSize(currentImageSize, available)
                 val previousImageSize = currentImageSize
 
+                //Make sure that the current image size is within the minimum and maximum size
                 currentImageSize = newImageSize.coerceIn(minImageSize, maxImageSize)
                 val consumed = currentImageSize - previousImageSize
 
                 imageScale = currentImageSize / maxImageSize
+
+                val sizeDelta = (currentImageSize - minImageSize) / (maxImageSize - minImageSize)
+                currentImageAlpha = sizeDelta.coerceIn(0f, 1f)
+                currentTitleAlpha = getTitleAlpha(currentImageAlpha)
 
                 return Offset(0f, consumed.value)
             }
@@ -85,13 +100,17 @@ fun TrackListScreen(
             HeaderSection(
                 title = title,
                 subtitle = subtitle,
-                modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .graphicsLayer {
+                        alpha = currentImageAlpha
+                    }
             )
+
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(all = 16.dp)
-
+                    .padding(all = 16.dp),
             ) {
                 items(tracks) { track ->
                     TrackItem(track = track)
@@ -114,23 +133,53 @@ fun TrackListScreen(
                     scaleX = imageScale
                     scaleY = imageScale
                     translationY = -(maxImageSize.toPx() - currentImageSize.toPx()) / 2f
+                    alpha = currentImageAlpha
                 }
+        )
+
+        TopAppBar(
+            title = {
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.graphicsLayer {
+                        alpha = currentTitleAlpha
+                    }
+                )
+            },
+            navigationIcon = {
+                IconButton(onClick = onBackClick) {
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back"
+                    )
+                }
+            },
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Color.Transparent,
+                navigationIconContentColor = MaterialTheme.colorScheme.onSurface,
+            ),
+            modifier = Modifier.background(Color.Transparent)
         )
     }
 }
 
 @Composable
 fun HeaderSection(title: String, subtitle: String, modifier: Modifier = Modifier) {
-    Column(modifier = modifier.fillMaxWidth()) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 16.dp)
+    ) {
         Text(
             text = title,
-            style = MaterialTheme.typography.headlineMedium,
+            style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.SemiBold,
         )
         Text(
             text = subtitle,
             style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Normal,
         )
     }
 }
@@ -168,6 +217,20 @@ fun TrackItem(track: Track, modifier: Modifier = Modifier) {
                 )
             }
         }
+    }
+}
+
+private fun getNewImageSize(currentImageSize: Dp, offset: Offset): Dp {
+    val sensitivity = 0.3f
+    return currentImageSize + (offset.y * sensitivity).dp
+}
+
+private fun getTitleAlpha(currentImageAlpha: Float): Float {
+    val sensitivity = 0.3f
+    return if (currentImageAlpha <= sensitivity) {
+        (sensitivity - currentImageAlpha) / sensitivity
+    } else {
+        0f
     }
 }
 
@@ -217,7 +280,8 @@ fun TrackListScreenPreview() {
                         ),
                         isExplicit = false,
                     ),
-                )
+                ),
+                onBackClick = {},
             )
         }
 

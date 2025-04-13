@@ -66,6 +66,7 @@ class MainActivity : ComponentActivity() {
                                     ?: "",
                                 tracks = viewModel.trackListUiState.collectAsStateWithLifecycle().value.tracks,
                                 modifier = Modifier.padding(innerPadding),
+                                onBackClick = { navController.popBackStack() },
                             )
                         }
                     }
