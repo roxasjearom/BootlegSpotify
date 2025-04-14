@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -63,8 +64,8 @@ fun TrackListScreen(
     imageUrl: String,
     tracks: List<Track> = emptyList(),
     modifier: Modifier = Modifier,
-    maxImageSize: Dp = 240.dp,
-    minImageSize: Dp = 54.dp,
+    maxImageSize: Dp = 320.dp,
+    minImageSize: Dp = 62.dp,
     onBackClick: () -> Unit,
 ) {
     var currentImageSize by remember { mutableStateOf(maxImageSize) }
@@ -78,7 +79,6 @@ fun TrackListScreen(
                 val newImageSize = getNewImageSize(currentImageSize, available)
                 val previousImageSize = currentImageSize
 
-                //Make sure that the current image size is within the minimum and maximum size
                 currentImageSize = newImageSize.coerceIn(minImageSize, maxImageSize)
                 val consumed = currentImageSize - previousImageSize
 
@@ -94,9 +94,43 @@ fun TrackListScreen(
     }
 
     Box(modifier = modifier.nestedScroll(nestedScrollConnection)) {
-        Column(modifier = Modifier.offset {
-            IntOffset(0, currentImageSize.roundToPx())
-        }) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(all = 16.dp)
+                .offset {
+                    IntOffset(0, currentImageSize.roundToPx())
+                },
+        ) {
+            items(tracks) { track ->
+                TrackItem(track = track)
+            }
+        }
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(maxImageSize)
+                .align(Alignment.TopCenter)
+                .graphicsLayer {
+                    scaleX = imageScale
+                    scaleY = imageScale
+                    translationY = -(maxImageSize.toPx() - currentImageSize.toPx()) / 2f
+                    alpha = currentImageAlpha
+                }) {
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(imageUrl)
+                    .crossfade(true)
+                    .memoryCachePolicy(CachePolicy.ENABLED)
+                    .build(),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .size(240.dp)
+            )
+
             HeaderSection(
                 title = title,
                 subtitle = subtitle,
@@ -106,36 +140,7 @@ fun TrackListScreen(
                         alpha = currentImageAlpha
                     }
             )
-
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(all = 16.dp),
-            ) {
-                items(tracks) { track ->
-                    TrackItem(track = track)
-                }
-            }
         }
-
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(imageUrl)
-                .crossfade(true)
-                .memoryCachePolicy(CachePolicy.ENABLED)
-                .build(),
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .size(maxImageSize)
-                .align(Alignment.TopCenter)
-                .graphicsLayer {
-                    scaleX = imageScale
-                    scaleY = imageScale
-                    translationY = -(maxImageSize.toPx() - currentImageSize.toPx()) / 2f
-                    alpha = currentImageAlpha
-                }
-        )
 
         TopAppBar(
             title = {
