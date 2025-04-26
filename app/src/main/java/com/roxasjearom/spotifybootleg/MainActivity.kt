@@ -11,6 +11,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Menu
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -48,9 +51,24 @@ class MainActivity : ComponentActivity() {
                 val context = LocalContext.current
 
                 val topLevelRoutes = listOf(
-                    TopLevelRoute("Home", Route.Home, Icons.Default.Home),
-                    TopLevelRoute("Search", Route.Search, Icons.Default.Search),
-                    TopLevelRoute("Library", Route.Library, Icons.Default.Menu),
+                    TopLevelRoute(
+                        "Home",
+                        Route.Home,
+                        Icons.Outlined.Home,
+                        Icons.Filled.Home
+                    ),
+                    TopLevelRoute(
+                        "Search",
+                        Route.Search,
+                        Icons.Outlined.Search,
+                        Icons.Filled.Search,
+                    ),
+                    TopLevelRoute(
+                        "Library",
+                        Route.Library,
+                        Icons.Outlined.Menu,
+                        Icons.Filled.Menu,
+                    ),
                 )
                 val navBackStackEntry by navController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry?.destination?.route
@@ -59,15 +77,20 @@ class MainActivity : ComponentActivity() {
                     bottomBar = {
                         NavigationBar {
                             topLevelRoutes.forEach { topLevelRoute ->
+                                val isSelected = currentRoute?.contains(topLevelRoute.name, true) == true
                                 NavigationBarItem(
                                     icon = {
                                         Icon(
-                                            topLevelRoute.icon,
+                                            if (isSelected) {
+                                                topLevelRoute.selectedIcon
+                                            } else {
+                                                topLevelRoute.unselectedIcon
+                                            },
                                             contentDescription = topLevelRoute.name
                                         )
                                     },
                                     label = { Text(topLevelRoute.name) },
-                                    selected = currentRoute.equals(topLevelRoute.name, true),
+                                    selected = isSelected,
                                     onClick = {
                                         navController.navigate(topLevelRoute.route) {
                                             popUpTo(navController.graph.findStartDestination().id) {
