@@ -10,6 +10,7 @@ private val SpotifyDarkColorScheme = darkColorScheme(
     onPrimary = Color.Black,
     secondary = SpotifyLightGray,
     onSecondary = Color.Black,
+    tertiary = SpotifyLightBlack,
     background = Color.Black,
     onBackground = Color.White,
     surface = SpotifyBlack,

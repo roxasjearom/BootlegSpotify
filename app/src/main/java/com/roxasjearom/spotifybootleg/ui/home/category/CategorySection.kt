@@ -1,5 +1,6 @@
 package com.roxasjearom.spotifybootleg.ui.home.category
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,15 +10,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.CenterHorizontally
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,7 +42,7 @@ fun CategorySection(
     Column(modifier = modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = CenterVertically,
         ) {
             Text(
                 text = stringResource(R.string.header_category),
@@ -57,7 +60,10 @@ fun CategorySection(
             }
         }
 
-        LazyRow {
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            modifier = modifier.fillMaxWidth(),
+        ) {
             items(categories) { category ->
                 CategoryItem(category = category, onCategoryClicked = onCategoryClicked)
             }
@@ -71,12 +77,14 @@ fun CategoryItem(
     category: Category,
     onCategoryClicked: (String) -> Unit,
 ) {
-    Column(
+    Row(
         modifier = modifier
-            .width(124.dp)
+            .fillMaxWidth()
             .wrapContentHeight()
             .clickable { onCategoryClicked(category.id) }
-            .padding(8.dp),
+            .padding(all = 4.dp)
+            .clip(RoundedCornerShape(4.dp))
+            .background(MaterialTheme.colorScheme.tertiary)
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
@@ -86,13 +94,14 @@ fun CategoryItem(
                 .build(),
             contentDescription = null,
             modifier = Modifier
-                .width(124.dp)
-                .height(124.dp)
+                .width(48.dp)
+                .height(48.dp)
         )
+        Spacer(modifier = Modifier.width(8.dp))
         Text(
-            text = category.name.uppercase(),
+            text = category.name,
             style = MaterialTheme.typography.titleSmall,
-            modifier = Modifier.align(CenterHorizontally),
+            modifier = Modifier.align(CenterVertically),
         )
     }
 }

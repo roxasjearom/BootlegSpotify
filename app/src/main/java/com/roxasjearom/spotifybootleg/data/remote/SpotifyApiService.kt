@@ -14,7 +14,7 @@ interface SpotifyApiService {
     }
 
     @GET("${API_VERSION}/browse/categories")
-    suspend fun getCategories(@Query("limit") limit: Int = 10): CategoriesResponse
+    suspend fun getCategories(@Query("limit") limit: Int = 8): CategoriesResponse
 
     @GET("${API_VERSION}/artists")
     suspend fun getArtists(@Query("ids") ids: String): ArtistsResponse
