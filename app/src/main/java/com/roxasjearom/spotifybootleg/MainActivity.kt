@@ -146,7 +146,10 @@ class MainActivity : ComponentActivity() {
                                     ?: "",
                                 tracks = viewModel.trackListUiState.collectAsStateWithLifecycle().value.tracks,
                                 modifier = Modifier.padding(innerPadding),
-                                onBackClick = { navController.popBackStack() },
+                                onBackClicked = { navController.popBackStack() },
+                                onTrackClicked = {
+                                    //Navigate to Now Playing screen
+                                }
                             )
                         }
                         composable<Route.Search> { SearchScreen() }

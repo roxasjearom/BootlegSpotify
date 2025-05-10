@@ -1,10 +1,13 @@
 package com.roxasjearom.spotifybootleg.ui.tracklist
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -17,15 +20,19 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -66,12 +73,29 @@ fun TrackListScreen(
     modifier: Modifier = Modifier,
     maxImageSize: Dp = 320.dp,
     minImageSize: Dp = 62.dp,
-    onBackClick: () -> Unit,
+    onBackClicked: () -> Unit,
+    onTrackClicked: (String) -> Unit,
 ) {
     var currentImageSize by remember { mutableStateOf(maxImageSize) }
     var imageScale by remember { mutableFloatStateOf(1f) }
     var currentImageAlpha by remember { mutableFloatStateOf(1f) }
     var currentTitleAlpha by remember { mutableFloatStateOf(0f) }
+
+    var showBottomSheet by remember { mutableStateOf(false) }
+    var selectedTrackName by remember { mutableStateOf("") }
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = false,
+    )
+
+    if (showBottomSheet) {
+        TrackOptionsBottomSheet(
+            trackName = selectedTrackName,
+            sheetState = sheetState,
+            onDismissRequest = {
+                showBottomSheet = false
+            }
+        )
+    }
 
     val nestedScrollConnection = remember {
         object : NestedScrollConnection {
@@ -103,7 +127,15 @@ fun TrackListScreen(
                 },
         ) {
             items(tracks) { track ->
-                TrackItem(track = track)
+                TrackItem(
+                    track = track,
+                    onTrackClicked = { selectedTrack ->
+                        onTrackClicked(selectedTrack.id)
+                    },
+                    onMoreOptionsClicked = { selectedTrack ->
+                        showBottomSheet = true
+                        selectedTrackName = selectedTrack.name
+                    })
             }
         }
 
@@ -154,7 +186,7 @@ fun TrackListScreen(
                 )
             },
             navigationIcon = {
-                IconButton(onClick = onBackClick) {
+                IconButton(onClick = onBackClicked) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back"
@@ -190,38 +222,80 @@ fun HeaderSection(title: String, subtitle: String, modifier: Modifier = Modifier
 }
 
 @Composable
-fun TrackItem(track: Track, modifier: Modifier = Modifier) {
-    Column(
+fun TrackItem(
+    track: Track,
+    modifier: Modifier = Modifier,
+    onTrackClicked: (Track) -> Unit,
+    onMoreOptionsClicked: (Track) -> Unit,
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
+            .clickable { onTrackClicked(track) }
             .padding(all = 16.dp)
     ) {
-        val artists = track.artists.joinToString(", ") { it.name }
+        Column {
+            val artists = track.artists.joinToString(", ") { it.name }
 
-        Text(
-            text = track.name,
-            style = MaterialTheme.typography.bodyLarge,
-            fontWeight = FontWeight.Normal,
-        )
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            if (track.isExplicit) {
-                ExplicitTag()
-                Spacer(modifier = Modifier.width(4.dp))
-            }
+            Text(
+                text = track.name,
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Normal,
+            )
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                if (track.isExplicit) {
+                    ExplicitTag()
+                    Spacer(modifier = Modifier.width(4.dp))
+                }
 
-            CompositionLocalProvider(
-                LocalContentColor provides MaterialTheme.colorScheme.onSurface.copy(
-                    alpha = 0.70f
-                )
-            ) {
-                Text(
-                    text = artists,
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.Normal,
-                )
+                CompositionLocalProvider(
+                    LocalContentColor provides MaterialTheme.colorScheme.onSurface.copy(
+                        alpha = 0.70f
+                    )
+                ) {
+                    Text(
+                        text = artists,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Normal,
+                    )
+                }
             }
         }
+
+        CompositionLocalProvider(
+            LocalContentColor provides MaterialTheme.colorScheme.onSurface.copy(alpha = 0.70f)
+        ) {
+            Icon(
+                imageVector = Icons.Filled.MoreVert,
+                contentDescription = "More options",
+                modifier = Modifier
+                    .size(24.dp)
+                    .clickable(onClick = { onMoreOptionsClicked(track) })
+            )
+        }
+    }
+
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TrackOptionsBottomSheet(
+    trackName: String,
+    sheetState: SheetState,
+    onDismissRequest: () -> Unit,
+) {
+    ModalBottomSheet(
+        modifier = Modifier.fillMaxHeight(),
+        sheetState = sheetState,
+        onDismissRequest = onDismissRequest
+    ) {
+        Text(
+            trackName,
+            modifier = Modifier.padding(16.dp)
+        )
     }
 }
 
@@ -286,7 +360,8 @@ fun TrackListScreenPreview() {
                         isExplicit = false,
                     ),
                 ),
-                onBackClick = {},
+                onBackClicked = {},
+                onTrackClicked = {},
             )
         }
 
@@ -311,6 +386,8 @@ fun TrackItemPreview() {
                     ),
                     isExplicit = true,
                 ),
+                onTrackClicked = {},
+                onMoreOptionsClicked = {},
             )
         }
     }
