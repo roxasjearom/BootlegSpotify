@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -21,6 +22,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalContentColor
@@ -50,6 +52,7 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -295,11 +298,56 @@ fun TrackOptionsBottomSheet(
         sheetState = sheetState,
         onDismissRequest = onDismissRequest
     ) {
+        Column {
+            Text(
+                trackName,
+                modifier = Modifier.padding(16.dp),
+                style = MaterialTheme.typography.bodyMedium,
+            )
+            HorizontalDivider(modifier = Modifier.fillMaxWidth(), thickness = 1.dp)
+
+            val trackOptions = getTrackOptions()
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                items(trackOptions) { option ->
+                    TrackOptionListItem(option = option)
+                }
+            }
+        }
+
+    }
+}
+
+@Composable
+fun TrackOptionListItem(option: TrackOption) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(
+            painter = painterResource(id = option.iconResId),
+            contentDescription = option.title,
+            modifier = Modifier.size(24.dp),
+            tint = MaterialTheme.colorScheme.onSurface,
+        )
+        Spacer(modifier = Modifier.width(16.dp))
         Text(
-            trackName,
-            modifier = Modifier.padding(16.dp)
+            text = option.title,
+            style = MaterialTheme.typography.bodyMedium,
         )
     }
+}
+
+private fun getTrackOptions(): List<TrackOption> {
+    return listOf(
+        TrackOption.AddToLikedSongs,
+        TrackOption.AddToPlaylist,
+        TrackOption.AddToQueue,
+        TrackOption.GoToAlbum,
+        TrackOption.GoToArtist,
+        TrackOption.ShowSpotifyCode,
+    )
 }
 
 private fun getNewImageSize(currentImageSize: Dp, offset: Offset): Dp {
