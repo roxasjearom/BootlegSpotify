@@ -2,7 +2,6 @@ package com.roxasjearom.spotifybootleg.ui.tracklist
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -52,6 +51,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
@@ -69,8 +69,8 @@ fun TrackListScreen(
     title: String,
     subtitle: String,
     imageUrl: String,
-    tracks: List<Track> = emptyList(),
     modifier: Modifier = Modifier,
+    tracks: List<Track> = emptyList(),
     maxImageSize: Dp = 320.dp,
     minImageSize: Dp = 62.dp,
     onBackClicked: () -> Unit,
@@ -230,20 +230,21 @@ fun TrackItem(
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
         modifier = modifier
             .fillMaxWidth()
             .wrapContentHeight()
             .clickable { onTrackClicked(track) }
             .padding(all = 16.dp)
     ) {
-        Column {
+        Column(modifier = Modifier.weight(1f)) {
             val artists = track.artists.joinToString(", ") { it.name }
 
             Text(
                 text = track.name,
-                style = MaterialTheme.typography.bodyLarge,
+                style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Normal,
+                overflow = TextOverflow.Ellipsis,
+                maxLines = 1,
             )
             Row(verticalAlignment = Alignment.CenterVertically) {
                 if (track.isExplicit) {
@@ -258,8 +259,10 @@ fun TrackItem(
                 ) {
                     Text(
                         text = artists,
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = MaterialTheme.typography.bodySmall,
                         fontWeight = FontWeight.Normal,
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1,
                     )
                 }
             }
